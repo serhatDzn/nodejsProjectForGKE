@@ -1,0 +1,30 @@
+{
+  "name": "nodejsapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/serhatDzn/nodejsProjectForGKE.git"
+  },
+  "keywords": [
+    "gke",
+    "nodejs",
+    "kubernetes",
+    "prometheus",
+    "grafana",
+    "nginx"
+  ],
+  "author": "Serhat Duzen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/serhatDzn/nodejsProjectForGKE/issues"
+  },
+  "homepage": "https://github.com/serhatDzn/nodejsProjectForGKE#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
