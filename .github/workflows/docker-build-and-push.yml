@@ -21,7 +21,7 @@ jobs:
 
       -
         name: Read Version from package.json
-        run: echo "::set-env name=PACKAGE_VERSION::$(jq -r .version ./nodejsApp/package.json)"
+        run: echo "PACKAGE_VERSION=$(jq -r .version ./nodejsApp/package.json)" >> $GITHUB_ENV
         shell: bash
         working-directory: ./
 
