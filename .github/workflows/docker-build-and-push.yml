@@ -26,4 +26,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build and push
-        run: docker build -t serhatd/nodejsApp:$(date +%s) ./nodejsApp && docker push serhatd/nodejsApp:$(date +%s)
+        run: docker build -t serhatd/nodejsapp:$(date +%s) ./nodejsApp && docker push serhatd/nodejsapp:$(date +%s)
