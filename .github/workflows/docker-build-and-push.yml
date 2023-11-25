@@ -18,6 +18,13 @@ jobs:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      -
+        name: Read Version from package.json
+        run: echo "::set-env name=PACKAGE_VERSION::$(jq -r .version ./nodejsApp/package.json)"
+        shell: bash
+        working-directory: ./
+
       -
         name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -26,4 +33,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build and push
-        run: docker build -t serhatd/nodejsapp:$(date +%s) ./nodejsApp && docker push serhatd/nodejsapp:$(date +%s)
+        run: docker build -t serhatd/nodejsapp:${{ env.PACKAGE_VERSION }} ./nodejsApp && docker push serhatd/nodejsapp:${{ env.PACKAGE_VERSION }}
