@@ -22,4 +22,4 @@ helm repo update
 
 helm install grafana grafana/grafana \
   --set service.type=LoadBalancer
-```
+```A
