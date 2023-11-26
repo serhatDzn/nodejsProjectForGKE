@@ -1,4 +1,4 @@
-name: ci-cd
+name: ci
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - 'main'
 
 jobs:
-  docker-build-push-and-kubectl-apply:
+  docker-build-push:
     runs-on: ubuntu-latest
     steps:
       -
@@ -32,10 +32,3 @@ jobs:
       -
         name: Build and push
         run: docker build -t serhatd/nodejsapp:${{ env.PACKAGE_VERSION }} ./nodejsApp && docker push serhatd/nodejsapp:${{ env.PACKAGE_VERSION }}
-      -
-        name: Deploy to Kubernetes
-        run: |
-          echo "$KUBE_CONFIG_DATA" > kubeconfig.yaml
-          kubectl apply -f ./nodejsApp/deployment.yaml --kubeconfig=kubeconfig.yaml
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
