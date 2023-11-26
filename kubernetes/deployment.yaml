@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: nodejs-app
-        image: your-docker-username/nodejs-app:latest
+        image: serhatd/nodejsapp:1.0.1
         ports:
         - containerPort: 3000

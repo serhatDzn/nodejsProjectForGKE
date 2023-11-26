@@ -5,17 +5,7 @@ helm install nginx-ingress-controller oci://ghcr.io/nginxinc/charts/nginx-ingres
 
 # For TLS Certificate
 
-```
-sudo certbot certonly --standalone -d tekirdag.life
-
-sudo ls /etc/letsencrypt/live/nodejsapp.tekirdag.life
-
-kubectl create secret tls mytlssecret --cert=/etc/letsencrypt/live/nodejsapp.tekirdag.life/fullchain.pem --key=/etc/letsencrypt/live/nodejsapp.tekirdag.life/privkey.pem -n test
-
-```
-
-or
-
+## Cert-manager installation
 ```
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
@@ -25,23 +15,61 @@ helm install \
   --namespace cert-manager \
   --create-namespace \
   --version v1.13.2 
+```
 
+## Cluster issuer and Certifiacte Creation
+```
 cat <<EOF | kubectl apply -f -
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-staging
+  name: letsencrypt-prod
+  namespace: cert-manager
 spec:
   acme:
-    server: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: serhatduzen3@gmail.com
+    email: serhatduzen@tekirdag.life
+    server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: letsencrypt-staging
+      name: letsencrypt-issuer-account-key
     solvers:
     - http01:
         ingress:
           class: nginx
 EOF
+
+```
+
+
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nodejsapp-tekirdag-life
+  namespace: test
+spec:
+  secretName: nodejsapp-tekirdag-life-tls
+  duration: 2160h
+  renewBefore: 360h
+  subject:
+    organizations:
+      - tekirdag-life
+  isCA: false
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+  usages:
+    - server auth
+    - client auth
+  dnsNames:
+    - nodejsapp.tekirdag.life
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
+EOF
+
 ```
 
 # Locust Load Testing
@@ -49,7 +77,7 @@ EOF
 helm repo add locustio https://locustio.github.io/
 
 main.py
-"
+```
 from locust import HttpUser, task, between
 from lib.example_functions import choose_random_page
 
@@ -67,7 +95,7 @@ class WebsiteUser(HttpUser):
     @task(3)
     def get_random_page(self):
         self.client.get(choose_random_page(), headers=default_headers)
-"
+```
 
 kubectl create configmap locustfile-config --from-file=main.py
 
